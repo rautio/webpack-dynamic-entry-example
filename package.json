@@ -1,0 +1,37 @@
+{
+  "name": "webpack-dynamic-entry-example",
+  "version": "1.0.0",
+  "description": "Quick example to showcase using dynamic entry points to support multiple use cases in one project.",
+  "main": "webpack.config.js",
+  "scripts": {
+    "prestart": "npm run start-message",
+    "start-message": "node tools/startMessage.js",
+    "start-usecase1": "cross-env USECASE=\"usecase1\" npm run prestart && cross-env USECASE=\"usecase1\" npm run run-dev",
+    "start-usecase2": "cross-env USECASE=\"usecase2\" npm run prestart && cross-env USECASE=\"usecase2\" npm run run-dev",
+    "run-dev": "npm-run-all --parallel test-usecase:watch open dev lint-usecase:watch",
+    "lint-usecase": "cross-var node_modules/.bin/esw webpack.config.* core $USECASE tools",
+    "lint-usecase:watch": "npm run lint-usecase -- --watch",
+    "dev": "webpack",
+    "open": "opener ./index.html"
+  },
+  "keywords": [
+    "Webpack",
+    "dynamic",
+    "entry"
+  ],
+  "author": "Oskari Rautiainen",
+  "license": "MIT",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-react-hmre": "^1.1.1",
+    "colors": "^1.1.2",
+    "eslint": "^4.17.0",
+    "eslint-plugin-react": "^7.6.1",
+    "eslint-watch": "^3.1.3",
+    "react": "^16.2.0",
+    "webpack": "^3.11.0"
+  }
+}
