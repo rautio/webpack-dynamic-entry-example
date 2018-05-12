@@ -1,4 +1,5 @@
 import colors from 'colors';
+//Some fun printouts when running the npm scripts to show which use case you are running.
 
 /* eslint-disable no-console */
 

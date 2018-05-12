@@ -8,11 +8,10 @@
     "start-message": "node tools/startMessage.js",
     "start-usecase1": "cross-env USECASE=\"usecase1\" npm run prestart && cross-env USECASE=\"usecase1\" npm run run-dev",
     "start-usecase2": "cross-env USECASE=\"usecase2\" npm run prestart && cross-env USECASE=\"usecase2\" npm run run-dev",
-    "run-dev": "npm-run-all --parallel test-usecase:watch open dev lint-usecase:watch",
+    "run-dev": "npm-run-all --parallel test-usecase:watch dev lint-usecase:watch",
     "lint-usecase": "cross-var node_modules/.bin/esw webpack.config.* core $USECASE tools",
     "lint-usecase:watch": "npm run lint-usecase -- --watch",
-    "dev": "webpack",
-    "open": "opener ./index.html"
+    "dev": "webpack"
   },
   "keywords": [
     "Webpack",

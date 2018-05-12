@@ -3,40 +3,32 @@ var webpack = require('webpack');
 var BabiliPlugin = require('babili-webpack-plugin');
 var path = require('path');
 
+//This is where we get the usecase name from the npm script
 var usecase = process.env.USECASE;
 
 //Change this to your library name
 //Also remember to change the 'main' entry point in package.json
-var outputName = 'btc-graph-viz';
+var outputName = 'same_output';
 var outputFile = outputName + '.js';
 var plugins = [];
-
-//For build mode we output a minified file. This is what will be published to npm.
-//Otherwise we can use the unminified version for development and debugging.
 if(env === 'build'){
   plugins.push(new BabiliPlugin());
   // This is where we could distinguish a .min.js version for build
   // But I'm keeping both versions as .js for now for ease of development
 }
 
-//For using fetch
-plugins.push(new webpack.ProvidePlugin({
-    'Promise': 'es6-promise', // (https://gist.github.com/Couto/b29676dd1ab8714a818f#gistcomment-1584602)
-    'fetch': 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch'
-}));
-
-//For loading sigma plugins
-plugins.push(new webpack.ProvidePlugin({
-  sigma: 'sigma'
-}));
-
-//The default entry point is src/index.js
-//The default output is build/btc-graph-viz.min.js or .js
+//The default entry point is <usecase_name>/index.js
+//The output path will be the same regardless
+//This allows you to follow the exact same dev and build process but with
+//different components/custom code included.
 var config = {
-  entry: ['whatwg-fetch',path.resolve(__dirname, './src/index.js')],
+  entry: ['whatwg-fetch',path.resolve(__dirname, './' + process + '/index.js')],
   resolve: {
     alias: {
-      'plugins': path.resolve(__dirname, './lib/plugins.js')
+      //This is a handy alias to use so that anywhere in your usecase you can import
+      //using an absolute path to core by doing: import ___ from '@core/___'.
+      //You can also accomplish the same if using babel and the babel module-resolver plugin
+      '@core': path.resolve(__dirname, './core')
     }
   },
   devtool: 'source-map',
@@ -62,21 +54,8 @@ var config = {
         loader: "eslint-loader",
         exclude: /node_modules/
       },
-      // {
-      //   test: /sigma.*\.js?$/, // the test to only select sigma files
-      //   exclude: ['src'], // you ony need to check node_modules, so remove your application files
-      //   loaders: ['script'] // loading as script
-      // },
-      {
-        test: /sigma.*\.js?$/,
-        use: [{
-          loader: 'imports-loader',
-          options: "this=>window"
-        }]
-      }
     ]
   }
 };
 
 module.exports = config;
-
